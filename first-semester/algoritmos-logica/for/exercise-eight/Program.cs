@@ -1,39 +1,41 @@
 ﻿using System;
 
-namespace exercise_six
+namespace exercise_eight
 {
     class Program
     {
         static void Main(string[] args)
         {
             /*
-                Exercício 6: Faça um programa que leia o nome e idade de 10 pessoas e calcule a quantidade de pessoas 
-                com idade >= 18 anos.
+                Exercício 8: Faça um programa que leia o nome e sexo de 10 pessoas e calcule a quantidade de homens.
             */
 
             try
             {
 
-                int countMore18 = 0;
-
+                int countMen = 0;
 
                 for (int i = 1; i <= 10; i++)
                 {
+
                     Console.WriteLine();
                     Console.WriteLine("Informe o seu nome: ");
                     string name = Console.ReadLine();
 
-                    Console.WriteLine("Informe a sua idade: ");
-                    int age = int.Parse(Console.ReadLine());
+                    Console.WriteLine("Informe o seu sexo: ");
+                    string sex = Console.ReadLine();
 
-                    if (name.Length > 0 && age > 0)
+                    if (name.Length > 0 && sex.Length > 0)
                     {
-                        Console.WriteLine($"{name} possui {age} anos");
+                        sex = sex.ToUpper();
 
-                        if (age >= 18)
+                        Console.WriteLine($"{name} tem sexo {sex}.");
+
+                        if (sex == "M" || sex.StartsWith("M"))
                         {
-                            countMore18++;
+                            countMen++;
                         }
+
                     }
                     else
                     {
@@ -43,8 +45,7 @@ namespace exercise_six
                 }
 
                 Console.WriteLine();
-                Console.WriteLine($"{countMore18} pessoas possuem mais de 18 anos.");
-
+                Console.WriteLine($"{countMen} pessoas são do sexo masculino.");
             }
             catch (Exception e)
             {
