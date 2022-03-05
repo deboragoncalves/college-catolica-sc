@@ -1,0 +1,11 @@
+C:\Users\debor\Documents\projetos\college-puc-minas\first-semester\estrutura-dados\vetores-matrizes\exercise-1\bin\Debug\netcoreapp3.1\exercise-1.exe
+C:\Users\debor\Documents\projetos\college-puc-minas\first-semester\estrutura-dados\vetores-matrizes\exercise-1\bin\Debug\netcoreapp3.1\exercise-1.deps.json
+C:\Users\debor\Documents\projetos\college-puc-minas\first-semester\estrutura-dados\vetores-matrizes\exercise-1\bin\Debug\netcoreapp3.1\exercise-1.runtimeconfig.json
+C:\Users\debor\Documents\projetos\college-puc-minas\first-semester\estrutura-dados\vetores-matrizes\exercise-1\bin\Debug\netcoreapp3.1\exercise-1.runtimeconfig.dev.json
+C:\Users\debor\Documents\projetos\college-puc-minas\first-semester\estrutura-dados\vetores-matrizes\exercise-1\bin\Debug\netcoreapp3.1\exercise-1.dll
+C:\Users\debor\Documents\projetos\college-puc-minas\first-semester\estrutura-dados\vetores-matrizes\exercise-1\bin\Debug\netcoreapp3.1\exercise-1.pdb
+C:\Users\debor\Documents\projetos\college-puc-minas\first-semester\estrutura-dados\vetores-matrizes\exercise-1\obj\Debug\netcoreapp3.1\exercise-1.csprojAssemblyReference.cache
+C:\Users\debor\Documents\projetos\college-puc-minas\first-semester\estrutura-dados\vetores-matrizes\exercise-1\obj\Debug\netcoreapp3.1\exercise-1.AssemblyInfoInputs.cache
+C:\Users\debor\Documents\projetos\college-puc-minas\first-semester\estrutura-dados\vetores-matrizes\exercise-1\obj\Debug\netcoreapp3.1\exercise-1.AssemblyInfo.cs
+C:\Users\debor\Documents\projetos\college-puc-minas\first-semester\estrutura-dados\vetores-matrizes\exercise-1\obj\Debug\netcoreapp3.1\exercise-1.dll
+C:\Users\debor\Documents\projetos\college-puc-minas\first-semester\estrutura-dados\vetores-matrizes\exercise-1\obj\Debug\netcoreapp3.1\exercise-1.pdb
