@@ -37,7 +37,24 @@ namespace exercise_5
                     break;
                 }
 
+                dataEmployees[x, 0] = dataEmployees[x, 0].ToUpper();
                 Console.WriteLine($"Funcionário {x + 1} - Nome: {dataEmployees[x, 0]}, Telefone: {dataEmployees[x, 1]}");
+            }
+
+            // Pesquisar um funcionário
+            Console.WriteLine();
+            Console.WriteLine("Digite o nome de funcionário e encontre o seu telefone: ");
+            string searchEmployee = Console.ReadLine();
+            searchEmployee = searchEmployee.ToUpper();
+
+            for (int z = 0; z < dataEmployees.Length; z++) 
+            {
+                if (dataEmployees[z, 0] == searchEmployee) {
+                    Console.WriteLine($"O funcionário {searchEmployee} tem telefone {dataEmployees[z, 1]}");
+                    break;
+                } else {
+                    Console.WriteLine($"O funcionário {searchEmployee} não existe na matriz.");
+                }
             }
         }
     }
