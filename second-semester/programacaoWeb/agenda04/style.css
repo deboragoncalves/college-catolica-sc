@@ -1,0 +1,38 @@
+header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#banner {
+    background-color: gray;
+    height: 300px;
+}
+
+#pacotes {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 0;
+}
+
+#subcontainer-detalhes-pacotes {
+    display: flex;
+}
+
+#detalhes-pacotes {
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+#detalhes-pacotes button {
+    margin: 10px 0;
+}
+
+#detalhes-pacotes div {
+    width: 150px;
+    height: 150px;
+    border: 1px solid black;
+}
