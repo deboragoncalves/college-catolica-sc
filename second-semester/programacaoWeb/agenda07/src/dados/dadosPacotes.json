@@ -1,0 +1,119 @@
+[
+    {
+        "cidade": "Buenos Aires",
+        "preco": 5000,
+        "hoteis": ["Obelisco Hotel", "Recoleta Hotel", "Claridge Hotel"],
+        "ida": {
+            "saida": "18/05/2023 05:00",
+            "chegada": "18/05/2023 15:00"
+        }, 
+        "volta": {
+            "saida": "28/05/2023 08:00",
+            "chegada": "28/05/2023 18:00"
+        }
+    },
+    {
+        "cidade": "Cancun",
+        "preco": 6000,
+        "hoteis": ["Hotel Casa Maya", "Real Inn Hotel", "Hotel Plaza Caribe"],
+        "ida": {
+            "saida": "19/05/2023 07:00",
+            "chegada": "19/05/2023 17:00"
+        }, 
+        "volta": {
+            "saida": "29/05/2023 09:00",
+            "chegada": "29/05/2023 16:00"
+        }
+    },
+    {
+        "cidade": "Londres",
+        "preco": 10000,
+        "hoteis": ["London Inn Hotel", "Four Seasons Hotel", "London Hilton Hotel"],
+        "ida": {
+            "saida": "20/05/2023 06:00",
+            "chegada": "20/05/2023 12:00"
+        }, 
+        "volta": {
+            "saida": "30/05/2023 10:00",
+            "chegada": "30/05/2023 18:00"
+        }
+    },
+    {
+        "cidade": "Fernando de Noronha",
+        "preco": 7000,
+        "hoteis": ["Pousada Maresia", "Pousada Maria Flor", "Pousada Sete Mares"],
+        "ida": {
+            "saida": "21/05/2023 11:00",
+            "chegada": "21/05/2023 20:00"
+        }, 
+        "volta": {
+            "saida": "31/05/2023 10:00",
+            "chegada": "31/05/2023 21:00"
+        }
+    },
+    {
+        "cidade": "Nova Iorque",
+        "preco": 11000,
+        "hoteis": ["Pod Times Square Hotel", "Hotel Edison Times Square", "Hotel Hilton Garden Inn"],
+        "ida": {
+            "saida": "01/06/2023 05:00",
+            "chegada": "01/05/2023 15:00"
+        }, 
+        "volta": {
+            "saida": "11/06/2023 08:00",
+            "chegada": "11/06/2023 18:00"
+        }
+    },    
+    {
+        "cidade": "Paris",
+        "preco": 12000,
+        "hoteis": ["Hotel F1 Paris", "B&B Hotel Paris", "Pullman Hotel"],
+        "ida": {
+            "saida": "02/06/2023 09:00",
+            "chegada": "02/06/2023 17:00"
+        }, 
+        "volta": {
+            "saida": "12/06/2023 07:00",
+            "chegada": "12/06/2023 15:00"
+        }
+    },
+    {
+        "cidade": "Rio de Janeiro",
+        "preco": 3000,
+        "hoteis": ["IBIS Hotel", "Hotel Atlântico Prime", "Hotel Pouso Real"],
+        "ida": {
+            "saida": "03/06/2023 10:00",
+            "chegada": "03/06/2023 15:00"
+        }, 
+        "volta": {
+            "saida": "13/06/2023 11:00",
+            "chegada": "13/06/2023 19:00"
+        }
+    },
+    {
+        "cidade": "São Francisco",
+        "preco": 10000,
+        "hoteis": ["Grant Hotel", "Chancellor Hotel", "Hotel Fusion"],
+        "ida": {
+            "saida": "04/06/2023 11:00",
+            "chegada": "04/06/2023 22:00"
+        }, 
+        "volta": {
+            "saida": "14/06/2023 09:00",
+            "chegada": "14/06/2023 20:00"
+        }
+    },
+    {
+        "cidade": "São Paulo",
+        "preco": 2500,
+        "hoteis": ["IBIS Hotel", "B&B Hotel", "Bourbon Hotel"],
+        "ida": {
+            "saida": "05/05/2023 05:00",
+            "chegada": "05/05/2023 15:00"
+        }, 
+        "volta": {
+            "saida": "15/05/2023 08:00",
+            "chegada": "15/05/2023 18:00"
+        }
+    }
+]
