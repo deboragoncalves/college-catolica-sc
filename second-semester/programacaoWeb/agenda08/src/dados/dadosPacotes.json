@@ -1,0 +1,167 @@
+[
+    {
+        "cidade": "Buenos Aires",
+        "preco": 5000,
+        "hoteis": ["Obelisco Hotel", "Recoleta Hotel", "Claridge Hotel"],
+        "ida": {
+            "saida": "18/05/2023 05:00",
+            "chegada": "18/05/2023 15:00"
+        }, 
+        "volta": {
+            "saida": "28/05/2023 08:00",
+            "chegada": "28/05/2023 18:00"
+        },
+        "imagens": [
+            "https://blogmaladeviagem.com.br/wp-content/uploads/2022/11/blog-mv-buenos-aires8.jpg",
+            "https://www.civitatis.com/f/argentina/buenos-aires/galeria/obelisco-buenos-aires.jpg",
+            "https://diariodocomercio.com.br/wp-content/uploads/2019/06/Buenos-Aires.jpg",
+            "https://www.elasviajando.com.br/wp-content/uploads/2019/11/onde-ficar-em-Buenos-Aires-5.jpg"
+        ]
+    },
+    {
+        "cidade": "Cancun",
+        "preco": 6000,
+        "hoteis": ["Hotel Casa Maya", "Real Inn Hotel", "Hotel Plaza Caribe"],
+        "ida": {
+            "saida": "19/05/2023 07:00",
+            "chegada": "19/05/2023 17:00"
+        }, 
+        "volta": {
+            "saida": "29/05/2023 09:00",
+            "chegada": "29/05/2023 16:00"
+        },
+        "imagens": [
+            "https://www.essemundoenosso.com.br/wp-content/uploads/2021/04/taxa-cancun-letreiro-dest-740x463.jpg",
+            "https://assets.simpleviewinc.com/simpleview/image/upload/c_fill,h_900,q_75,w_1700/v1/clients/quintanaroo/_cc911e74-049d-4172-b8d9-67b8942c9bc0.1392201394-2910bf3f5b8388c632d75b47bd71a0c94b1389b5c0b1926331aa7ed225a20103-d_640.jpg",
+            "https://guiaviajarmelhor.com.br/wp-content/uploads/2021/06/cancun10.jpg",
+            "https://cdn.panrotas.com.br/portal-panrotas-statics/media-files-cache/306549/67aa445579a9dcc13a8eb24657c7dd10andreasm88intec2q5qunsplash/0,126,2560,1528/1206,720,0.14/0/default.jpg"
+        ]
+    },
+    {
+        "cidade": "Londres",
+        "preco": 10000,
+        "hoteis": ["London Inn Hotel", "Four Seasons Hotel", "London Hilton Hotel"],
+        "ida": {
+            "saida": "20/05/2023 06:00",
+            "chegada": "20/05/2023 12:00"
+        }, 
+        "volta": {
+            "saida": "30/05/2023 10:00",
+            "chegada": "30/05/2023 18:00"
+        }
+    },
+    {
+        "cidade": "Fernando de Noronha",
+        "preco": 7000,
+        "hoteis": ["Pousada Maresia", "Pousada Maria Flor", "Pousada Sete Mares"],
+        "ida": {
+            "saida": "21/05/2023 11:00",
+            "chegada": "21/05/2023 20:00"
+        }, 
+        "volta": {
+            "saida": "31/05/2023 10:00",
+            "chegada": "31/05/2023 21:00"
+        },
+        "imagens": [
+            "https://blog.corvetanoronha.com.br/wp-content/uploads/2022/05/iStock-1176920998.jpg",
+            "https://www.melhoresdestinos.com.br/wp-content/uploads/2019/02/passagens-aereas-fernando-de-noronha-capa2019-01.jpg",
+            "https://media.istockphoto.com/id/1302338178/pt/foto/wonderful-view-of-conceicao-beach-fernando-de-noronha-island-brazil-with-the-famous-peak-hill.jpg?s=612x612&w=0&k=20&c=wbtWIRL6GGnc2HABmn0F4D0jhs7UT79oCq7huPKa0Sk=",
+            "https://noronhadiver.com.br/img/galery/26-07-2019/foto71-mergulhador-ao-lado-de-uma-tartaruga.jpg"
+        ]
+    },
+    {
+        "cidade": "Nova Iorque",
+        "preco": 11000,
+        "hoteis": ["Pod Times Square Hotel", "Hotel Edison Times Square", "Hotel Hilton Garden Inn"],
+        "ida": {
+            "saida": "01/06/2023 05:00",
+            "chegada": "01/05/2023 15:00"
+        }, 
+        "volta": {
+            "saida": "11/06/2023 08:00",
+            "chegada": "11/06/2023 18:00"
+        },
+        "imagens": [
+            "https://media.staticontent.com/media/pictures/bfb80462-7604-4711-8bfb-576e01508817",
+            "https://a.cdn-hotels.com/gdcs/production138/d1142/08366677-a8d0-4979-84d5-b54f93ca00e5.jpg?impolicy=fcrop&w=800&h=533&q=medium",
+            "https://www.remessaonline.com.br/blog/wp-content/uploads/2022/06/morar-em-nova-york-1170x777.jpg.webp",
+            "https://a.travel-assets.com/findyours-php/viewfinder/images/res40/104000/104060-New-York.jpg"
+        ]
+    },    
+    {
+        "cidade": "Paris",
+        "preco": 12000,
+        "hoteis": ["Hotel F1 Paris", "B&B Hotel Paris", "Pullman Hotel"],
+        "ida": {
+            "saida": "02/06/2023 09:00",
+            "chegada": "02/06/2023 17:00"
+        }, 
+        "volta": {
+            "saida": "12/06/2023 07:00",
+            "chegada": "12/06/2023 15:00"
+        },
+        "imagens": [
+            "https://viagemeturismo.abril.com.br/wp-content/uploads/2016/11/thinkstockphotos-4549879531.jpeg",
+            "https://www.escolhaviajar.com/wp-content/uploads/2021/03/fotos-de-paris-museu-do-louvre-3.jpg",
+            "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8fA%3D%3D&w=1000&q=80",
+            "https://img.freepik.com/fotos-premium/simbolos-de-paris-ao-por-do-sol-a-noite-de-verao_219717-5085.jpg"
+        ]
+    },
+    {
+        "cidade": "Rio de Janeiro",
+        "preco": 3000,
+        "hoteis": ["IBIS Hotel", "Hotel Atlântico Prime", "Hotel Pouso Real"],
+        "ida": {
+            "saida": "03/06/2023 10:00",
+            "chegada": "03/06/2023 15:00"
+        }, 
+        "volta": {
+            "saida": "13/06/2023 11:00",
+            "chegada": "13/06/2023 19:00"
+        },
+        "imagens": [
+            "https://a.cdn-hotels.com/gdcs/production187/d1216/5791a1f0-c31d-11e8-9739-0242ac110006.jpg?impolicy=fcrop&w=800&h=533&q=medium",
+            "https://www.melhoresdestinos.com.br/wp-content/uploads/2019/08/rio-de-janeiro-capa2019-01.jpg",
+            "https://www.grandmercure.com/wp-content/uploads/2020/04/RIO-DE-JANEIRO_3-shutterstock_1627098913__001-2200x1200.jpg",
+            "https://ep01.epimg.net/brasil/imagenes/2019/04/04/album/1554366052_082178_1554392973_noticia_normal.jpg"
+        ]
+    },
+    {
+        "cidade": "São Francisco",
+        "preco": 10000,
+        "hoteis": ["Grant Hotel", "Chancellor Hotel", "Hotel Fusion"],
+        "ida": {
+            "saida": "04/06/2023 11:00",
+            "chegada": "04/06/2023 22:00"
+        }, 
+        "volta": {
+            "saida": "14/06/2023 09:00",
+            "chegada": "14/06/2023 20:00"
+        },
+        "imagens": [
+            "https://estadosunidosbrasil.com.br/wp-content/uploads/sites/6/2022/08/sanfrancisco-1024x686.jpg",
+            "https://res.cloudinary.com/hello-tickets/image/upload/c_limit,f_auto,q_auto,w_768/v1629273553/post_images/san-francisco-7/city-pass/amogh-manjunath-HksFlo1t8iA-unsplash_Cropped.jpg",
+            "https://a.cdn-hotels.com/gdcs/production158/d625/ae569120-88c6-4bf7-95a2-4dd3b294943a.jpg", 
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcgZLob4T0SYOp4IPziWbDCZTZa_eklLZTQA&usqp=CAU"
+        ]
+    },
+    {
+        "cidade": "São Paulo",
+        "preco": 2500,
+        "hoteis": ["IBIS Hotel", "B&B Hotel", "Bourbon Hotel"],
+        "ida": {
+            "saida": "05/05/2023 05:00",
+            "chegada": "05/05/2023 15:00"
+        }, 
+        "volta": {
+            "saida": "15/05/2023 08:00",
+            "chegada": "15/05/2023 18:00"
+        },
+        "imagens": [
+            "https://viagemeturismo.abril.com.br/wp-content/uploads/2017/12/istock-842960000.jpg",
+            "https://a.cdn-hotels.com/gdcs/production75/d1821/443b14b1-8d56-4d6a-a600-23dd50147f05.jpg",
+            "https://gotogetherdmc.com/wp-content/uploads/2022/04/Tour-de-Arte-de-Rua.png",
+            "https://a.cdn-hotels.com/gdcs/production0/d1101/abeb86f2-c789-4eba-8b15-bfa1e5450304.jpg?impolicy=fcrop&w=800&h=533&q=medium"
+        ]
+    }
+]
