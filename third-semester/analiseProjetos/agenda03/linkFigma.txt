@@ -1,0 +1,21 @@
+Exercício: Crie os Mockups da interface de um aplicativo móvel para controle de horário de medicação. 
+O usuário pode usar o sistema para controlar o uso de seus remédios de uso contínuo ou prescrições. 
+A aplicação deve permitir o usuário registrar remédios, O usuário ao cadastrar o remédio deve indicar o princípio ativo, 
+laboratório, nome do remédio e dosagem. Para cada remédio, o usuário deve informar quantas vezes ao dia deve 
+tomar a medicação, por quantos dias deve tomar a medicação e o horário (data e hora) que irá tomar a primeira dose. 
+O usuário deve indicar ainda a frequência de uso e quantos dias deve tomar a medicação:
+
+-  1x ao dia, frequência 24h
+
+-  2x ao dia, frequência 12h
+
+-  3x ao dia, frequência  8h
+
+-  4x ao dia, frequência  6h
+
+-  6x ao dia, frequência  4h
+
+Com base no horário da primeira dose (data e hora) o sistema irá gerar para o usuário uma lista de dias e horários que o usuário deverá consumir o remédio. Sempre que o usuário tomar a dose ele deve marcar que tomou naquela data e hora. O sistema deve emitir um alerta para o usuário 5 minutos antes do horário avisando qual remédio deve ser consumido.
+O protótipo (wireframe ou mockup) deve abranger o caso de uso Registrar Remédio, no qual os remédios são pesquisados, incluídos alterados e excluídos. O protótipo deve considerar que a solução rodará em um dispositivo móvel, como por exemplo, um celular Android ou Iphone. 
+
+Resposta: https://www.figma.com/file/OlZWeZf9A6mZKeAIAsg4Vq/Agenda03---ADS?type=whiteboard&node-id=0-1
