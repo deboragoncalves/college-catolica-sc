@@ -17,9 +17,73 @@ a:hover {
     color: #fff;
 }
 
+.carousel-item {
+    margin-bottom: 50px;
+}
+
 .carousel-item img {
     width: 70%;
     margin: 0 auto;
+}
+
+.container-videos {
+    width: 50%;
+    margin: 30px auto;
+}
+
+.container-videos h5 {
+    margin: 20px auto;
+    text-align: center;
+    font-weight: bold;
+}
+
+#equipe {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 0;
+}
+
+#subcontainer-equipe {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#detalhes-equipe {
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+#detalhes-equipe .sheilla, #detalhes-equipe .fabiola {
+    height: 200px;
+    width: 150px;
+}
+
+#detalhes-equipe .luizomar {
+    height: 120px;
+}
+
+#detalhes-equipe .brait {
+    height: 200px;
+}
+
+#detalhes-equipe .jaqueline, #detalhes-equipe .adenizia {
+    height: 150px;
+}
+
+#detalhes-equipe img {
+    width: 200px;
+    height: 150px;
+    border-radius: 5%;
+}
+
+#detalhes-equipe span {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 5px;
 }
 
 main {
@@ -34,4 +98,23 @@ footer {
     align-items: center;
     background-color: #343a40;
     color: #fff;
+    bottom: 0;
+    position: fixed;
+}
+
+@media (max-width: 1000px) {
+    .container-videos {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .container-videos iframe {
+        width: 100%;
+    }
+}
+
+@media (max-width: 700px) {
+    #subcontainer-equipe {
+        flex-direction: column;
+    }
 }
