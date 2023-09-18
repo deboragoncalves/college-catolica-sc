@@ -10,6 +10,10 @@ while contador < 5:
     listaInteiros.append(numero);
     contador += 1;
 
+contador = 0;
 print("");
-print("Lista de inteiros: ");
-print(listaInteiros);
+print("Imprimindo valores da lista:");
+
+while contador < 5:
+    print(listaInteiros[contador]);
+    contador += 1;
