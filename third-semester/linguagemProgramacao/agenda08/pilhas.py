@@ -8,7 +8,9 @@ def inserir_processo(processo):
 
 def executar_processo():
     processos.clear();
+    
     print("Pilha de Processos está vazia.");
+    print(processos);
     exibir_menu();
 
 def listar_processo():

@@ -15,6 +15,9 @@ with open('ocorrencia.csv', 'r', errors='ignore') as ocorrenciaArquivo:
     ocorrencia_dia = linha[12]
     investigacao_status = linha[15]
     if cidade == 'JOINVILLE':
-        infoCidade.append(codigo_ocorrencia + " | " + ocorrencia_classificacao + " | " + ocorrencia_dia + " | " + investigacao_status + "\n")
+        ocorrenciasJoinville.write(codigo_ocorrencia + " | " + ocorrencia_classificacao + " | " + ocorrencia_dia + " | " + investigacao_status + "\n");
 
-ocorrenciasJoinville.writelines(infoCidade)
+        #infoCidade.append(codigo_ocorrencia + " | " + ocorrencia_classificacao + " | " + ocorrencia_dia + " | " + investigacao_status + "\n")
+
+ocorrenciasJoinville.close();
+ocorrenciaArquivo.close();

@@ -14,6 +14,5 @@ contador = 0;
 print("");
 print("Imprimindo valores da lista:");
 
-while contador < 5:
-    print(listaInteiros[contador]);
-    contador += 1;
+for numero in listaInteiros:
+    print(numero);
