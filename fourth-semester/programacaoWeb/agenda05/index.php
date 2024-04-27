@@ -13,7 +13,7 @@
 </head>
 <style>
     p {
-        margin: 10px;
+        margin: 0px;
     }
 
     p, h2 {
@@ -36,6 +36,7 @@
     }
 </style>
 <body> 
+    <a href="formularioCadastro.html" class="btn botao-cadastro">Cadastrar novo registro</a>
     <?php
         // Configurações do banco de dados
         $host = "localhost"; 
@@ -65,13 +66,14 @@
                 $endereco = $row["endereco"];
                 $sexo = $row["sexo"];
                 $interesses = $row["interesses"];
-                echo "<p>Registro " . $id . "<br>";
-                echo "<p>Nome: " . $nome. "<br>";
-                echo "<p>Email: " . $email. "<br>";
-                echo "<p>Nascimento " . $nascimento . "<br>";
-                echo "<p>Nome: " . $nome. "<br>";
-                echo "<p>Email: " . $email. "<br>";
-
+                echo "<p><b>Registro " . $id . "</b><br>";
+                echo "<p>Nome: " . $nome. "</p><br>";
+                echo "<p>Email: " . $email. "</p><br>";
+                echo "<p>Nascimento " . $nascimento . "</p><br>";
+                echo "<p>Estado: " . $estado. "</p><br>";
+                echo "<p>Endereço: " . $endereco. "</p><br>";
+                echo "<p>Sexo: " . $sexo. "</p><br>";
+                echo "<p>Interesses: " . $interesses. "</p><br>";
             }
         } else {
             echo "0 registros";
@@ -81,7 +83,6 @@
         $connection->close();
 
     ?>    
-    <a href="formularioCadastro.html" class="btn botao-cadastro">Cadastrar novo registro</a>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
       integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"

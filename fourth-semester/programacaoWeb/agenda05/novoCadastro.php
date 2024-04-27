@@ -28,9 +28,9 @@
         $sql = "INSERT INTO usuario (nome, nascimento, estado, endereco, interesses, sexo, login, senha, email) VALUES ('$nome', '$email', '$nascimentoFormat', '$estado', '$endereco', '', '$sexo', '$login', '$senha')";
 
         if ($connection->query($sql) === TRUE) {
-            echo "Registro inserido com sucesso!";
+            echo "<p>Registro inserido com sucesso!</p>";
         } else {
-            echo "Erro ao inserir registro: " . $connection->error;
+            echo "<p>Erro ao inserir registro: " . $connection->error . "</p>"; 
         }
     }
 
