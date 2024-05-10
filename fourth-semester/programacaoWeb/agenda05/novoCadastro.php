@@ -18,17 +18,17 @@
         $nome = $_POST['cadastro-nome'];
         $email = $_POST['cadastro-email'];
         $nascimento = $_POST['cadastro-nascimento'];
-        $nascimentoFormat = date("d/m/Y", strtotime($nascimento));
         $estado = filter_input(INPUT_POST, 'cadastro-estado');
         $endereco = $_POST['cadastro-endereco'];
         $sexo = $_POST['radioSexo'];
         $login = $_POST['cadastro-login'];
         $senha = $_POST['cadastro-senha'];
 
-        $sql = "INSERT INTO usuario (nome, nascimento, estado, endereco, interesses, sexo, login, senha, email) VALUES ('$nome', '$email', '$nascimentoFormat', '$estado', '$endereco', '', '$sexo', '$login', '$senha')";
+        $sql = "INSERT INTO usuario (nome, nascimento, estado, endereco, interesses, sexo, login, senha, email) VALUES ('$nome', '$nascimento', '$estado', '$endereco', '', '$sexo', '$login', '$senha', '$email')";
 
         if ($connection->query($sql) === TRUE) {
-            echo "<p>Registro inserido com sucesso!</p>";
+            header("Location: index.php");
+            exit();
         } else {
             echo "<p>Erro ao inserir registro: " . $connection->error . "</p>"; 
         }
