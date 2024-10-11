@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_pex/pages/menu_page.dart';
 import 'package:projeto_pex/pages/token_page.dart';
 
 class LoginPage extends StatelessWidget {
@@ -23,8 +24,11 @@ class LoginPage extends StatelessWidget {
     } else if (!isPasswordValid) {
       _showDialog(context, 'A senha deve ter pelo menos 8 caracteres.');
     } else {
-      // Se as validações passarem, navegue para a próxima página
-      print('Email e senha válidos');
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MenuPage()),
+      );
     }
   }
 
@@ -174,7 +178,8 @@ class LoginPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => TokenPage(email: _emailController.text)),
+                        builder: (context) =>
+                            TokenPage(email: _emailController.text)),
                   );
                 },
                 child: Text(
