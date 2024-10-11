@@ -64,7 +64,6 @@ class ConfirmaTokenPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Confirmar Token'),
       ),
       body: Center(
         child: Container(

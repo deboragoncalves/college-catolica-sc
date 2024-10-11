@@ -72,7 +72,6 @@ class TokenPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Receber Token'),
       ),
       body: Center(
         child: Container(

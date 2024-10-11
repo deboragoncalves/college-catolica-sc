@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_pex/pages/login_page.dart';
 
 class RedefinirSenhaPage extends StatelessWidget {
   @override
@@ -56,12 +57,17 @@ class RedefinirSenhaPage extends StatelessWidget {
         _showDialog(context, 'As senhas não coincidem.');
       } else {
         _showDialog(context, 'Senha redefinida com sucesso.');
+        Future.delayed(Duration(seconds: 30), () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => LoginPage()),
+          );
+        });
       }
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Redefinir Senha'),
       ),
       body: Center(
         child: Container(
