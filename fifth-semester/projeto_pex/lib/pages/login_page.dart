@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_pex/pages/menu_page.dart';
+import 'package:projeto_pex/pages/exibir_pedidos.dart';
 import 'package:projeto_pex/pages/token_page.dart';
 
 class LoginPage extends StatelessWidget {
@@ -27,7 +27,7 @@ class LoginPage extends StatelessWidget {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => MenuPage()),
+            builder: (context) => ExibirPedidos()),
       );
     }
   }
