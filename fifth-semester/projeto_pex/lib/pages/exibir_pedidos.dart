@@ -101,12 +101,40 @@ class ExibirPedidos extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Jose',
-            style: TextStyle(
-              fontSize: 24,
-              color: Color(0xFF7D5638),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Jose',
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Color(0xFF7D5638),
+                ),
+              ),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                    },
+                    child: Icon(
+                      Icons.create_outlined,
+                      color: Color(0xFF7D5638),
+                      size: 30
+                    ),
+                  ),
+                  SizedBox(width: 8), 
+                  GestureDetector(
+                    onTap: () {
+                    },
+                    child: Icon(
+                      Icons.restore_from_trash,
+                      color: Color(0xFF7D5638),
+                      size: 30
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
           SizedBox(height: 2),
           Text(
