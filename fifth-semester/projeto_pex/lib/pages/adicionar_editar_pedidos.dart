@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_pex/pages/menu_page.dart';
+import 'package:flutter_masked_text2/flutter_masked_text2.dart';
+import 'package:flutter/services.dart';
 
 class AdicionarEditarPedidos extends StatefulWidget {
   @override
@@ -10,12 +12,15 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _enderecoController = TextEditingController();
-  final TextEditingController _telefoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _dataController = TextEditingController();
   final TextEditingController _quantidadeController = TextEditingController();
+  final TextEditingController _telefoneController =
+      MaskedTextController(mask: '(00) 00000-0000');
+  final TextEditingController _dataController =
+      MaskedTextController(mask: '00/00/0000');
 
   String? _produtoSelecionado;
+  // ajustar lista produtos
   List<String> _produtos = ["Produto 1", "Produto 2", "Produto 3"];
   List<Map<String, dynamic>> _itens = [];
 
@@ -77,6 +82,9 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
                             keyboardType: TextInputType.number,
                             decoration: _buildInputDecoration('Quantidade'),
                             style: TextStyle(color: Colors.black),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
                           ),
                         ),
                         SizedBox(width: 20.0),
@@ -85,7 +93,8 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
                           height: 48,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: Color(0xFF7D5638), width: 2),
+                            border:
+                                Border.all(color: Color(0xFF7D5638), width: 2),
                           ),
                           child: IconButton(
                             icon: Icon(Icons.add),
@@ -120,13 +129,13 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
                               Text(
                                 item['produto'],
                                 style: TextStyle(
-                                  color: Color(0xFF7D5638), 
+                                  color: Color(0xFF7D5638),
                                 ),
                               ),
                               Text(
                                 "${item['quantidade']} un",
                                 style: TextStyle(
-                                  color: Color(0xFF7D5638), 
+                                  color: Color(0xFF7D5638),
                                 ),
                               ),
                               Text(
@@ -136,7 +145,8 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
                                 ),
                               ),
                               IconButton(
-                                icon: Icon(Icons.restore_from_trash, color: Color(0xFF7D5638)),
+                                icon: Icon(Icons.restore_from_trash,
+                                    color: Color(0xFF7D5638)),
                                 onPressed: () {
                                   setState(() {
                                     _itens.removeAt(index);
@@ -156,6 +166,21 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
+                  if (_itens.isNotEmpty) {
+                    // Cria um mapa com os dados preenchidos
+                    Map<String, dynamic> pedido = {
+                      'nome': _nomeController.text,
+                      'telefone': _telefoneController.text,
+                      'email': _emailController.text,
+                      'data': _dataController.text,
+                      'itens': _itens
+                    };
+
+                    // Navega de volta para a tela anterior passando o pedido
+                    Navigator.pop(context, pedido);
+                  } else {
+                    _exibirModalErro("Adicione pelo menos um item.");
+                  }
                 },
                 child: Text(
                   'SALVAR',
@@ -213,12 +238,13 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
       _exibirModalErro("O campo Nome deve ser preenchido.");
     } else if (_enderecoController.text.isEmpty) {
       _exibirModalErro("O campo Endereço deve ser preenchido.");
-    } else if (_telefoneController.text.isEmpty) {
-      _exibirModalErro("O campo Telefone deve ser preenchido.");
+    } else if (_telefoneController.text.isEmpty || _telefoneController.text.length != 15) {
+      _exibirModalErro("O campo Telefone deve estar no formato (00) 00000-0000.");
     } else if (!isEmailValid) {
       _exibirModalErro('Email inválido. Verifique se tem "@" e ".".');
-    } else if (_dataController.text.isEmpty) {
-      _exibirModalErro("O campo Data deve ser preenchido.");
+    } else if (_dataController.text.isEmpty ||
+        _dataController.text.length != 10) {
+      _exibirModalErro("O campo Data deve estar no formato dd/MM/yyyy.");
     } else if (_produtoSelecionado == null) {
       _exibirModalErro("O campo Produto deve ser preenchido.");
     } else if (_quantidadeController.text.isEmpty) {
@@ -227,7 +253,10 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
       setState(() {
         _itens.add({
           'produto': _produtoSelecionado,
-          'quantidade': _quantidadeController.text,
+          'quantidade':
+              int.parse(_quantidadeController.text),
+          // ajustar preço
+          'preco': double.parse('10')
         });
       });
       _produtoSelecionado = null;

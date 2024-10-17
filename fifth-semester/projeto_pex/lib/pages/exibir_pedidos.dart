@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:projeto_pex/pages/adicionar_editar_pedidos.dart';
 import 'package:projeto_pex/pages/menu_page.dart';
 
-class ExibirPedidos extends StatelessWidget {
+class ExibirPedidos extends StatefulWidget {
+  @override
+  _ExibirPedidosState createState() => _ExibirPedidosState();
+}
+
+class _ExibirPedidosState extends State<ExibirPedidos> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  List<Map<String, dynamic>> _pedidos = [];
   @override
   Widget build(BuildContext context) {
     final TextEditingController _filtroBuscaController =
@@ -63,12 +69,17 @@ class ExibirPedidos extends StatelessWidget {
                       icon: Icon(Icons.add),
                       color: Color(0xFF7D5638),
                       iconSize: 24,
-                      onPressed: () {
-                        Navigator.push(
+                      onPressed: () async {
+                        final pedido = await Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => AdicionarEditarPedidos()),
                         );
+                        if (pedido != null) {
+                          setState(() {
+                            _pedidos.add(pedido);
+                          });
+                        }
                       },
                     ),
                   ),
@@ -82,7 +93,9 @@ class ExibirPedidos extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 20),
-              ...List.generate(5, (index) => _buildOrderContainer()),
+              ..._pedidos
+                  .map((pedido) => _buildOrderContainer(pedido))
+                  .toList(),
             ],
           ),
         ),
@@ -90,7 +103,13 @@ class ExibirPedidos extends StatelessWidget {
     );
   }
 
-  Widget _buildOrderContainer() {
+  Widget _buildOrderContainer(Map<String, dynamic> pedido) {
+    double total = 0;
+
+    pedido['itens'].forEach((item) {
+      total += item['quantidade'] * item['preco'];
+    });
+
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Color(0xFF7D5638), width: 2),
@@ -105,7 +124,7 @@ class ExibirPedidos extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Jose',
+                pedido['nome'],
                 style: TextStyle(
                   fontSize: 24,
                   color: Color(0xFF7D5638),
@@ -114,22 +133,24 @@ class ExibirPedidos extends StatelessWidget {
               Row(
                 children: [
                   GestureDetector(
-                    onTap: () {
-                    },
+                    onTap: () {},
                     child: Icon(
                       Icons.create_outlined,
                       color: Color(0xFF7D5638),
-                      size: 30
+                      size: 30,
                     ),
                   ),
-                  SizedBox(width: 8), 
+                  SizedBox(width: 8),
                   GestureDetector(
                     onTap: () {
+                      setState(() {
+                        _pedidos.remove(pedido);
+                      });
                     },
                     child: Icon(
                       Icons.restore_from_trash,
                       color: Color(0xFF7D5638),
-                      size: 30
+                      size: 30,
                     ),
                   ),
                 ],
@@ -138,7 +159,7 @@ class ExibirPedidos extends StatelessWidget {
           ),
           SizedBox(height: 2),
           Text(
-            '(47) 99999-9999',
+            pedido['telefone'],
             style: TextStyle(
               fontSize: 16,
               color: Color(0xFF7D5638),
@@ -146,32 +167,24 @@ class ExibirPedidos extends StatelessWidget {
           ),
           SizedBox(height: 2),
           Text(
-            '11/10/2024',
+            pedido['data'],
             style: TextStyle(
               fontSize: 16,
               color: Color(0xFF7D5638),
             ),
           ),
           SizedBox(height: 20),
-          Container(
-            height: 150,
-            child: ListView(
-              children: [
-                _buildProductRow('Produto 1', 5, 10.00),
-                SizedBox(height: 15),
-                _buildProductRow('Produto 2', 10, 15.00),
-                SizedBox(height: 15),
-                _buildProductRow('Produto 3', 20, 20.00),
-              ],
-            ),
-          ),
+          ...pedido['itens'].map<Widget>((item) {
+            return _buildProductRow(
+                item['produto'], item['quantidade'], item['preco']);
+          }).toList(),
           SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SizedBox(),
               Text(
-                'TOTAL: R\$ 45.00',
+                'TOTAL: R\$ ${total.toStringAsFixed(2)}',
                 style: TextStyle(
                   fontSize: 20,
                   color: Color(0xFF7D5638),
@@ -185,28 +198,35 @@ class ExibirPedidos extends StatelessWidget {
   }
 
   Widget _buildProductRow(String productName, int quantity, double price) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    double totalPrice = quantity * price;
+
+    return Column(
       children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                productName,
-                style: TextStyle(fontSize: 16, color: Color(0xFFCA7755)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    productName,
+                    style: TextStyle(fontSize: 16, color: Color(0xFFCA7755)),
+                  ),
+                  Text(
+                    'Quantidade: $quantity',
+                    style: TextStyle(fontSize: 12, color: Color(0xFFCA7755)),
+                  ),
+                ],
               ),
-              Text(
-                'Quantidade: $quantity',
-                style: TextStyle(fontSize: 12, color: Color(0xFFCA7755)),
-              ),
-            ],
-          ),
+            ),
+            Text(
+              'R\$ ${totalPrice.toStringAsFixed(2)}',
+              style: TextStyle(fontSize: 16, color: Color(0xFF7D5638)),
+            ),
+          ],
         ),
-        Text(
-          'R\$ ${price.toStringAsFixed(2)}',
-          style: TextStyle(fontSize: 16, color: Color(0xFF7D5638)),
-        ),
+        SizedBox(height: 15),
       ],
     );
   }
