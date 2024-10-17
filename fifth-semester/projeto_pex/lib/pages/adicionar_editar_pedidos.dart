@@ -4,6 +4,10 @@ import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:flutter/services.dart';
 
 class AdicionarEditarPedidos extends StatefulWidget {
+  final Map<String, dynamic>? pedido;
+
+  AdicionarEditarPedidos({this.pedido});
+
   @override
   _AdicionarEditarPedidosState createState() => _AdicionarEditarPedidosState();
 }
@@ -23,6 +27,18 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
   // ajustar lista produtos
   List<String> _produtos = ["Produto 1", "Produto 2", "Produto 3"];
   List<Map<String, dynamic>> _itens = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.pedido != null) {
+      _nomeController.text = widget.pedido!['nome'];
+      _telefoneController.text = widget.pedido!['telefone'];
+      _emailController.text = widget.pedido!['email'];
+      _dataController.text = widget.pedido!['data'];
+      _itens = List<Map<String, dynamic>>.from(widget.pedido!['itens']);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +183,6 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
               child: ElevatedButton(
                 onPressed: () {
                   if (_itens.isNotEmpty) {
-                    // Cria um mapa com os dados preenchidos
                     Map<String, dynamic> pedido = {
                       'nome': _nomeController.text,
                       'telefone': _telefoneController.text,
@@ -176,7 +191,6 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
                       'itens': _itens
                     };
 
-                    // Navega de volta para a tela anterior passando o pedido
                     Navigator.pop(context, pedido);
                   } else {
                     _exibirModalErro("Adicione pelo menos um item.");
@@ -238,8 +252,10 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
       _exibirModalErro("O campo Nome deve ser preenchido.");
     } else if (_enderecoController.text.isEmpty) {
       _exibirModalErro("O campo Endereço deve ser preenchido.");
-    } else if (_telefoneController.text.isEmpty || _telefoneController.text.length != 15) {
-      _exibirModalErro("O campo Telefone deve estar no formato (00) 00000-0000.");
+    } else if (_telefoneController.text.isEmpty ||
+        _telefoneController.text.length != 15) {
+      _exibirModalErro(
+          "O campo Telefone deve estar no formato (00) 00000-0000.");
     } else if (!isEmailValid) {
       _exibirModalErro('Email inválido. Verifique se tem "@" e ".".');
     } else if (_dataController.text.isEmpty ||
@@ -253,8 +269,7 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
       setState(() {
         _itens.add({
           'produto': _produtoSelecionado,
-          'quantidade':
-              int.parse(_quantidadeController.text),
+          'quantidade': int.parse(_quantidadeController.text),
           // ajustar preço
           'preco': double.parse('10')
         });

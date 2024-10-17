@@ -101,9 +101,19 @@ class _ExibirPedidosState extends State<ExibirPedidos> {
                 ],
               ),
               SizedBox(height: 20),
-              ..._pedidosFiltrados
-                  .map((pedido) => _buildOrderContainer(pedido))
-                  .toList(),
+              _pedidosFiltrados.isEmpty
+                  ? Center(
+                      child: Text(
+                        "Nenhum pedido encontrado. Para adicionar novos pedidos, clique no ícone +",
+                        style: TextStyle(fontSize: 18, color: Color(0xFF7D5638)),
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  : Column(
+                      children: _pedidosFiltrados
+                          .map((pedido) => _buildOrderContainer(pedido))
+                          .toList(),
+                    ),
             ],
           ),
         ),
@@ -170,7 +180,23 @@ class _ExibirPedidosState extends State<ExibirPedidos> {
               Row(
                 children: [
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () async {
+                      final pedidoAtualizado = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AdicionarEditarPedidos(pedido: pedido),
+                        ),
+                      );
+
+                      if (pedidoAtualizado != null) {
+                        setState(() {
+                          int index = _pedidos.indexOf(pedido);
+                          _pedidos[index] = pedidoAtualizado;
+                          _pedidosFiltrados = List.from(_pedidos);
+                        });
+                      }
+                    },
                     child: Icon(
                       Icons.create_outlined,
                       color: Color(0xFF7D5638),
