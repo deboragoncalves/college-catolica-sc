@@ -9,13 +9,18 @@ class ExibirPedidos extends StatefulWidget {
 
 class _ExibirPedidosState extends State<ExibirPedidos> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   List<Map<String, dynamic>> _pedidos = [];
+  List<Map<String, dynamic>> _pedidosFiltrados = [];
+  TextEditingController _filtroBuscaController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _pedidosFiltrados = _pedidos;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _filtroBuscaController =
-        TextEditingController();
-
     return Scaffold(
       key: _scaffoldKey,
       appBar: PreferredSize(
@@ -58,6 +63,15 @@ class _ExibirPedidosState extends State<ExibirPedidos> {
                     ),
                   ),
                   SizedBox(width: 10),
+                  IconButton(
+                    icon: Icon(Icons.filter_alt_outlined),
+                    color: Color(0xFF7D5638),
+                    iconSize: 50,
+                    onPressed: () {
+                      _filtrarPedidos();
+                    },
+                  ),
+                  SizedBox(width: 5),
                   Container(
                     width: 48,
                     height: 48,
@@ -78,22 +92,16 @@ class _ExibirPedidosState extends State<ExibirPedidos> {
                         if (pedido != null) {
                           setState(() {
                             _pedidos.add(pedido);
+                            _pedidosFiltrados = List.from(_pedidos);
                           });
                         }
                       },
                     ),
                   ),
-                  SizedBox(width: 5),
-                  IconButton(
-                    icon: Icon(Icons.filter_alt_outlined),
-                    color: Color(0xFF7D5638),
-                    iconSize: 50,
-                    onPressed: () {},
-                  ),
                 ],
               ),
               SizedBox(height: 20),
-              ..._pedidos
+              ..._pedidosFiltrados
                   .map((pedido) => _buildOrderContainer(pedido))
                   .toList(),
             ],
@@ -101,6 +109,35 @@ class _ExibirPedidosState extends State<ExibirPedidos> {
         ),
       ),
     );
+  }
+
+  void _filtrarPedidos() {
+    String filtro = _filtroBuscaController.text.toLowerCase().trim();
+    setState(() {
+      if (filtro.isEmpty) {
+        _pedidosFiltrados = List.from(_pedidos);
+      } else {
+        _pedidosFiltrados = _pedidos.where((Map<String, dynamic> pedido) {
+          bool nomeClienteMatch = pedido['nome'].toLowerCase().contains(filtro);
+          bool telefoneMatch =
+              pedido['telefone'].toLowerCase().contains(filtro);
+          bool dataMatch = pedido['data'].toLowerCase().contains(filtro);
+          bool nomeProdutoMatch = false;
+          bool precoProdutoMatch = false;
+
+          pedido['itens'].forEach((item) {
+            nomeProdutoMatch = item['produto'].toLowerCase().contains(filtro);
+            precoProdutoMatch = item['preco'].toString().contains(filtro);
+          });
+
+          return nomeClienteMatch ||
+              telefoneMatch ||
+              dataMatch ||
+              nomeProdutoMatch ||
+              precoProdutoMatch;
+        }).toList();
+      }
+    });
   }
 
   Widget _buildOrderContainer(Map<String, dynamic> pedido) {
@@ -145,6 +182,7 @@ class _ExibirPedidosState extends State<ExibirPedidos> {
                     onTap: () {
                       setState(() {
                         _pedidos.remove(pedido);
+                        _pedidosFiltrados = List.from(_pedidos);
                       });
                     },
                     child: Icon(
