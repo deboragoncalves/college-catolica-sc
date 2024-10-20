@@ -169,7 +169,7 @@ class _AdicionarEditarProdutosState extends State<AdicionarEditarProdutos> {
           'quantidade': int.parse(_quantidadeController.text),
         };
 
-        _exibirModalErro('Produto salvo com sucesso');
+        Navigator.of(context).pop(_produtoSalvo);
       });
 
       _nomeController.clear();
