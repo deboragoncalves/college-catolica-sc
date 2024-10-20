@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_pex/pages/exibir_pedidos.dart';
+import 'package:projeto_pex/pages/exibir_produtos.dart';
 import 'package:projeto_pex/pages/login_page.dart';
 
 class MenuPage extends StatelessWidget {
@@ -85,8 +86,11 @@ class MenuPage extends StatelessWidget {
                           color: Color(0xFF7D5638), size: 24),
                       title: Text('Produtos'),
                       onTap: () {
-                        Navigator.pop(context);
-                      },
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ExibirProdutos()),
+                        );                      },
                     ),
                     ListTile(
                       leading:

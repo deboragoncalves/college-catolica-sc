@@ -54,6 +54,16 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            Text(
+              "PEDIDO",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF7D5638),
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 5.0),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
