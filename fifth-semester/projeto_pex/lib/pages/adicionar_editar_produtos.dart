@@ -26,9 +26,10 @@ class _AdicionarEditarProdutosState extends State<AdicionarEditarProdutos> {
     super.initState();
     if (widget.produto != null) {
       _nomeController.text = widget.produto!['nome'];
-      _precoController.text = widget.produto!['preco'];
+      _precoController.text = widget.produto!['preco'].toString();
       _descricaoController.text = widget.produto!['descricao'];
-      _quantidadeController.text = widget.produto!['quantidade'];
+      _quantidadeController.text =
+          widget.produto!['quantidade'].toString();
     }
   }
 
@@ -161,21 +162,12 @@ class _AdicionarEditarProdutosState extends State<AdicionarEditarProdutos> {
     } else if (_quantidadeController.text.isEmpty) {
       _exibirModalErro("O campo Quantidade deve ser preenchido.");
     } else {
-      setState(() {
-        _produtoSalvo = {
-          'nome': _nomeController.text,
-          'descricao': _descricaoController.text,
-          'preco': double.parse(_precoController.text),
-          'quantidade': int.parse(_quantidadeController.text),
-        };
-
-        Navigator.of(context).pop(_produtoSalvo);
+      Navigator.pop(context, {
+        'nome': _nomeController.text,
+        'descricao': _descricaoController.text,
+        'preco': double.parse(_precoController.text),
+        'quantidade': int.parse(_quantidadeController.text),
       });
-
-      _nomeController.clear();
-      _descricaoController.clear();
-      _precoController.clear();
-      _quantidadeController.clear();
     }
   }
 

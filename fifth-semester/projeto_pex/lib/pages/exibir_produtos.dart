@@ -47,13 +47,16 @@ class _ExibirProdutosState extends State<ExibirProdutos> {
                         filled: true,
                         fillColor: Color(0xFFF7F7F7),
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xFF7D5638), width: 2.0),
+                          borderSide:
+                              BorderSide(color: Color(0xFF7D5638), width: 2.0),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xFF7D5638), width: 2.0),
+                          borderSide:
+                              BorderSide(color: Color(0xFF7D5638), width: 2.0),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xFF7D5638), width: 2.0),
+                          borderSide:
+                              BorderSide(color: Color(0xFF7D5638), width: 2.0),
                         ),
                       ),
                       style: TextStyle(color: Colors.black),
@@ -64,7 +67,27 @@ class _ExibirProdutosState extends State<ExibirProdutos> {
                     icon: Icon(Icons.filter_alt_outlined),
                     color: Color(0xFF7D5638),
                     iconSize: 50,
-                    onPressed: () => {},
+                    onPressed: () {
+                      String query = _filtroBuscaController.text.toLowerCase();
+
+                      setState(() {
+                        _produtosFiltrados = _produtos.where((produto) {
+                          final nome = produto['nome'].toLowerCase();
+                          final descricao =
+                              produto['descricao']?.toLowerCase() ??
+                                  '';
+                          final preco =
+                              produto['preco'].toString().toLowerCase();
+                          final quantidade =
+                              produto['quantidade'].toString().toLowerCase();
+
+                          return nome.contains(query) ||
+                              descricao.contains(query) ||
+                              preco.contains(query) ||
+                              quantidade.contains(query);
+                        }).toList();
+                      });
+                    },
                   ),
                   SizedBox(width: 5),
                   Container(
@@ -81,7 +104,8 @@ class _ExibirProdutosState extends State<ExibirProdutos> {
                       onPressed: () async {
                         final produto = await Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => AdicionarEditarProdutos()),
+                          MaterialPageRoute(
+                              builder: (context) => AdicionarEditarProdutos()),
                         );
                         if (produto != null) {
                           setState(() {
@@ -96,12 +120,15 @@ class _ExibirProdutosState extends State<ExibirProdutos> {
               ),
               SizedBox(height: 20),
               if (_produtosFiltrados.isNotEmpty) ...[
-                if (_produtosFiltrados.length == 1) _buildHeaderRow(),
                 ListView.builder(
                   shrinkWrap: true,
-                  itemCount: _produtosFiltrados.length,
+                  itemCount: _produtosFiltrados.length + 1,
                   itemBuilder: (context, index) {
-                    final produto = _produtosFiltrados[index];
+                    if (index == 0) {
+                      return _buildHeaderRow();
+                    }
+
+                    final produto = _produtosFiltrados[index - 1];
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Row(
@@ -109,9 +136,10 @@ class _ExibirProdutosState extends State<ExibirProdutos> {
                         children: [
                           _buildProductColumn('01', 43),
                           _buildProductColumn('${produto['nome']}', 80),
-                          _buildProductColumn('R\$ ${produto['preco'].toStringAsFixed(2)}', 80),
+                          _buildProductColumn(
+                              'R\$ ${produto['preco'].toStringAsFixed(2)}', 80),
                           _buildProductColumn('${produto['quantidade']}', 80),
-                          _buildActionColumn(index),
+                          _buildActionColumn(index - 1),
                         ],
                       ),
                     );
@@ -184,7 +212,22 @@ class _ExibirProdutosState extends State<ExibirProdutos> {
             color: Color(0xFF7D5638),
             size: 20,
           ),
-          onPressed: () {},
+          onPressed: () async {
+            final produtoEditado = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AdicionarEditarProdutos(
+                  produto: _produtosFiltrados[index],
+                ),
+              ),
+            );
+            if (produtoEditado != null) {
+              setState(() {
+                _produtos[index] = produtoEditado;
+                _produtosFiltrados = List.from(_produtos);
+              });
+            }
+          },
         ),
         IconButton(
           icon: Icon(
