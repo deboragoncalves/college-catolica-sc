@@ -24,9 +24,11 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
       MaskedTextController(mask: '00/00/0000');
 
   String? _produtoSelecionado;
-  // ajustar lista produtos
   List<String> _produtos = ["Produto 1", "Produto 2", "Produto 3"];
   List<Map<String, dynamic>> _itens = [];
+
+  String? _statusSelecionado;
+  List<String> _statusOptions = ["Pedido feito", "Pedido entregue"];
 
   @override
   void initState() {
@@ -36,6 +38,7 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
       _telefoneController.text = widget.pedido!['telefone'];
       _emailController.text = widget.pedido!['email'];
       _dataController.text = widget.pedido!['data'];
+      _statusSelecionado = widget.pedido!['status'];
       _itens = List<Map<String, dynamic>>.from(widget.pedido!['itens']);
     }
   }
@@ -79,8 +82,32 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
                     _buildTextField(_emailController, 'E-mail',
                         keyboardType: TextInputType.emailAddress),
                     SizedBox(height: 20.0),
-                    _buildTextField(_dataController, 'Data',
-                        keyboardType: TextInputType.datetime),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: DropdownButtonFormField<String>(
+                            value: _statusSelecionado,
+                            decoration: _buildInputDecoration("Status"),
+                            items: _statusOptions.map((String status) {
+                              return DropdownMenuItem<String>(
+                                value: status,
+                                child: Text(status),
+                              );
+                            }).toList(),
+                            onChanged: (String? novoStatus) {
+                              setState(() {
+                                _statusSelecionado = novoStatus;
+                              });
+                            },
+                          ),
+                        ),
+                        SizedBox(width: 10.0),
+                        Expanded(
+                          child: _buildTextField(_dataController, 'Data',
+                              keyboardType: TextInputType.datetime),
+                        )
+                      ],
+                    ),
                     SizedBox(height: 20.0),
                     Row(
                       children: [
@@ -146,30 +173,14 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                "01",
-                                style: TextStyle(
-                                  color: Color(0xFF7D5638),
-                                ),
-                              ),
-                              Text(
-                                item['produto'],
-                                style: TextStyle(
-                                  color: Color(0xFF7D5638),
-                                ),
-                              ),
-                              Text(
-                                "${item['quantidade']} un",
-                                style: TextStyle(
-                                  color: Color(0xFF7D5638),
-                                ),
-                              ),
-                              Text(
-                                "R\$ 10,00/un",
-                                style: TextStyle(
-                                  color: Color(0xFF7D5638),
-                                ),
-                              ),
+                              Text("01",
+                                  style: TextStyle(color: Color(0xFF7D5638))),
+                              Text(item['produto'],
+                                  style: TextStyle(color: Color(0xFF7D5638))),
+                              Text("${item['quantidade']} un",
+                                  style: TextStyle(color: Color(0xFF7D5638))),
+                              Text("R\$ 10,00/un",
+                                  style: TextStyle(color: Color(0xFF7D5638))),
                               IconButton(
                                 icon: Icon(Icons.restore_from_trash,
                                     color: Color(0xFF7D5638)),
@@ -198,6 +209,7 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
                       'telefone': _telefoneController.text,
                       'email': _emailController.text,
                       'data': _dataController.text,
+                      'status': _statusSelecionado,
                       'itens': _itens
                     };
 
@@ -273,19 +285,23 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
       _exibirModalErro("O campo Data deve estar no formato dd/MM/yyyy.");
     } else if (_produtoSelecionado == null) {
       _exibirModalErro("O campo Produto deve ser preenchido.");
-    } else if (_quantidadeController.text.isEmpty) {
-      _exibirModalErro("O campo Quantidade deve ser preenchido.");
+    } else if (_quantidadeController.text.isEmpty ||
+        int.tryParse(_quantidadeController.text) == null ||
+        int.parse(_quantidadeController.text) <= 0) {
+      _exibirModalErro("Informe uma quantidade válida.");
+    } else if (_statusSelecionado == null) {
+      _exibirModalErro("O campo Status deve ser preenchido.");
     } else {
       setState(() {
         _itens.add({
-          'produto': _produtoSelecionado,
+          'produto': _produtoSelecionado!,
           'quantidade': int.parse(_quantidadeController.text),
-          // ajustar preço
+          // ajustar preco
           'preco': double.parse('10')
         });
+        _produtoSelecionado = null;
+        _quantidadeController.clear();
       });
-      _produtoSelecionado = null;
-      _quantidadeController.clear();
     }
   }
 

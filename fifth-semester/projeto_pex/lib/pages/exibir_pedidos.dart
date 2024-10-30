@@ -132,6 +132,7 @@ class _ExibirPedidosState extends State<ExibirPedidos> {
           bool telefoneMatch =
               pedido['telefone'].toLowerCase().contains(filtro);
           bool dataMatch = pedido['data'].toLowerCase().contains(filtro);
+          bool statusMatch = pedido['status'].toLowerCase().contains(filtro);
           bool nomeProdutoMatch = false;
           bool precoProdutoMatch = false;
 
@@ -144,7 +145,7 @@ class _ExibirPedidosState extends State<ExibirPedidos> {
               telefoneMatch ||
               dataMatch ||
               nomeProdutoMatch ||
-              precoProdutoMatch;
+              precoProdutoMatch || statusMatch;
         }).toList();
       }
     });
@@ -220,6 +221,14 @@ class _ExibirPedidosState extends State<ExibirPedidos> {
                 ],
               ),
             ],
+          ),
+          SizedBox(height: 2),
+          Text(
+            pedido['status'],
+            style: TextStyle(
+              fontSize: 16,
+              color: Color(0xFF7D5638),
+            ),
           ),
           SizedBox(height: 2),
           Text(
