@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_pex/pages/menu_page.dart';
 import 'package:flutter/services.dart';
@@ -19,12 +20,14 @@ class _AdicionarEditarProdutosState extends State<AdicionarEditarProdutos> {
   final TextEditingController _precoController = TextEditingController();
   final TextEditingController _quantidadeController = TextEditingController();
 
-  Map<String, dynamic> _produtoSalvo = {};
+  // Armazena o ID do produto, se existir
+  String? _docId;
 
   @override
   void initState() {
     super.initState();
     if (widget.produto != null) {
+      _docId = widget.produto!['id']; // Armazena o ID do documento
       _nomeController.text = widget.produto!['nome'];
       _precoController.text = widget.produto!['preco'].toString();
       _descricaoController.text = widget.produto!['descricao'];
@@ -152,7 +155,7 @@ class _AdicionarEditarProdutosState extends State<AdicionarEditarProdutos> {
     );
   }
 
-  void validarCampos() {
+  void validarCampos() async {
     if (_nomeController.text.isEmpty) {
       _exibirModalErro("O campo Nome deve ser preenchido.");
     } else if (_descricaoController.text.isEmpty) {
@@ -162,12 +165,24 @@ class _AdicionarEditarProdutosState extends State<AdicionarEditarProdutos> {
     } else if (_quantidadeController.text.isEmpty) {
       _exibirModalErro("O campo Quantidade deve ser preenchido.");
     } else {
-      Navigator.pop(context, {
+      final produtoData = {
         'nome': _nomeController.text,
         'descricao': _descricaoController.text,
         'preco': double.parse(_precoController.text),
         'quantidade': int.parse(_quantidadeController.text),
-      });
+      };
+
+      final produtosCollection = FirebaseFirestore.instance.collection('produtos');
+
+      if (_docId != null) {
+        // Editar produto existente
+        await produtosCollection.doc(_docId).set(produtoData);
+      } else {
+        // Adicionar novo produto
+        await produtosCollection.add(produtoData);
+      }
+
+      Navigator.pop(context, {'atualizar': true});
     }
   }
 

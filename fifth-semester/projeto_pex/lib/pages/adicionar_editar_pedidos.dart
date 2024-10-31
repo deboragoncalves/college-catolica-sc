@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_pex/pages/menu_page.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
@@ -30,6 +31,9 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
   String? _statusSelecionado;
   List<String> _statusOptions = ["Pedido feito", "Pedido entregue"];
 
+  // Variável para armazenar o nome original
+  String? _nomeOriginal;
+
   @override
   void initState() {
     super.initState();
@@ -40,6 +44,51 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
       _dataController.text = widget.pedido!['data'];
       _statusSelecionado = widget.pedido!['status'];
       _itens = List<Map<String, dynamic>>.from(widget.pedido!['itens']);
+
+      // Armazenar o nome original do pedido para verificar alterações
+      _nomeOriginal = widget.pedido!['nome'];
+    }
+  }
+
+  void _salvarPedido() async {
+    if (_itens.isNotEmpty) {
+      Map<String, dynamic> pedido = {
+        'nome': _nomeController.text,
+        'telefone': _telefoneController.text,
+        'email': _emailController.text,
+        'data': _dataController.text,
+        'status': _statusSelecionado,
+        'itens': _itens,
+      };
+
+      try {
+        // Verificar se o nome foi alterado
+        if (_nomeOriginal != null && _nomeOriginal != _nomeController.text) {
+          // Excluir o pedido com o nome original
+          await FirebaseFirestore.instance
+              .collection('pedidos')
+              .doc(_nomeOriginal)
+              .delete();
+        }
+
+        // Salvar o pedido com o novo nome
+        await FirebaseFirestore.instance
+            .collection('pedidos')
+            .doc(_nomeController.text)
+            .set(pedido);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Pedido salvo com sucesso!")),
+        );
+
+        Navigator.pop(context, pedido);
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Erro ao salvar o pedido: $e")),
+        );
+      }
+    } else {
+      _exibirModalErro("Adicione pelo menos um item.");
     }
   }
 
@@ -202,22 +251,7 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  if (_itens.isNotEmpty) {
-                    Map<String, dynamic> pedido = {
-                      'nome': _nomeController.text,
-                      'telefone': _telefoneController.text,
-                      'email': _emailController.text,
-                      'data': _dataController.text,
-                      'status': _statusSelecionado,
-                      'itens': _itens
-                    };
-
-                    Navigator.pop(context, pedido);
-                  } else {
-                    _exibirModalErro("Adicione pelo menos um item.");
-                  }
-                },
+                onPressed: _salvarPedido,
                 child: Text(
                   'SALVAR',
                   style: TextStyle(color: Color(0xFFF3E6D4)),

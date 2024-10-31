@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "601840769353",
+    "project_id": "projeto-pex-gp03",
+    "storage_bucket": "projeto-pex-gp03.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:601840769353:android:4214174f37612522426298",
+        "android_client_info": {
+          "package_name": "com.example.projeto_pex"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkmZfcNe0phOxRxZZ847rMUIZSQfB2DnY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

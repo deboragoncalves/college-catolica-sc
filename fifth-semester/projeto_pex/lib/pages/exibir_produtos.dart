@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_pex/pages/adicionar_editar_produtos.dart';
 import 'package:projeto_pex/pages/menu_page.dart';
@@ -16,7 +17,20 @@ class _ExibirProdutosState extends State<ExibirProdutos> {
   @override
   void initState() {
     super.initState();
-    _produtosFiltrados = _produtos;
+    _loadProdutosFromFirebase();
+  }
+
+  Future<void> _loadProdutosFromFirebase() async {
+    FirebaseFirestore.instance.collection('produtos').get().then((querySnapshot) {
+      setState(() {
+        _produtos = querySnapshot.docs.map((doc) {
+          final produto = doc.data();
+          produto['id'] = doc.id; // Guarda o ID do documento
+          return produto;
+        }).toList();
+        _produtosFiltrados = List.from(_produtos);
+      });
+    });
   }
 
   @override
@@ -102,16 +116,13 @@ class _ExibirProdutosState extends State<ExibirProdutos> {
                       color: Color(0xFF7D5638),
                       iconSize: 24,
                       onPressed: () async {
-                        final produto = await Navigator.push(
+                        final resultado = await Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => AdicionarEditarProdutos()),
                         );
-                        if (produto != null) {
-                          setState(() {
-                            _produtos.add(produto);
-                            _produtosFiltrados = List.from(_produtos);
-                          });
+                        if (resultado != null && resultado['atualizar'] == true) {
+                          await _loadProdutosFromFirebase();
                         }
                       },
                     ),
@@ -213,7 +224,7 @@ class _ExibirProdutosState extends State<ExibirProdutos> {
             size: 20,
           ),
           onPressed: () async {
-            final produtoEditado = await Navigator.push(
+            final resultado = await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => AdicionarEditarProdutos(
@@ -221,11 +232,8 @@ class _ExibirProdutosState extends State<ExibirProdutos> {
                 ),
               ),
             );
-            if (produtoEditado != null) {
-              setState(() {
-                _produtos[index] = produtoEditado;
-                _produtosFiltrados = List.from(_produtos);
-              });
+            if (resultado != null && resultado['atualizar'] == true) {
+              await _loadProdutosFromFirebase();
             }
           },
         ),
@@ -235,11 +243,11 @@ class _ExibirProdutosState extends State<ExibirProdutos> {
             color: Color(0xFF7D5638),
             size: 20,
           ),
-          onPressed: () {
-            setState(() {
-              _produtos.removeAt(index);
-              _produtosFiltrados = List.from(_produtos);
-            });
+          onPressed: () async {
+            final produto = _produtosFiltrados[index];
+            final produtoId = produto['id'];
+            await FirebaseFirestore.instance.collection('produtos').doc(produtoId).delete();
+            await _loadProdutosFromFirebase();
           },
         ),
       ],

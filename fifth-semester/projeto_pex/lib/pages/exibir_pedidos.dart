@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:projeto_pex/pages/adicionar_editar_pedidos.dart';
 import 'package:projeto_pex/pages/menu_page.dart';
 
@@ -16,7 +17,38 @@ class _ExibirPedidosState extends State<ExibirPedidos> {
   @override
   void initState() {
     super.initState();
-    _pedidosFiltrados = _pedidos;
+    _buscarPedidos();
+  }
+
+  Future<void> _buscarPedidos() async {
+    try {
+      final pedidosSnapshot =
+      await FirebaseFirestore.instance.collection('pedidos').get();
+
+      setState(() {
+        _pedidos = pedidosSnapshot.docs.map((doc) {
+          return {
+            ...doc.data(),
+            'id': doc.id,
+          };
+        }).toList();
+        _pedidosFiltrados = List.from(_pedidos);
+      });
+    } catch (e) {
+      print("Erro ao buscar pedidos: $e");
+    }
+  }
+
+  Future<void> _deletarPedido(String pedidoId) async {
+    try {
+      await FirebaseFirestore.instance.collection('pedidos').doc(pedidoId).delete();
+      setState(() {
+        _pedidos.removeWhere((pedido) => pedido['id'] == pedidoId);
+        _pedidosFiltrados = List.from(_pedidos);
+      });
+    } catch (e) {
+      print("Erro ao deletar pedido: $e");
+    }
   }
 
   @override
@@ -48,15 +80,15 @@ class _ExibirPedidosState extends State<ExibirPedidos> {
                         fillColor: Color(0xFFF7F7F7),
                         border: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Color(0xFF7D5638), width: 2.0),
+                          BorderSide(color: Color(0xFF7D5638), width: 2.0),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Color(0xFF7D5638), width: 2.0),
+                          BorderSide(color: Color(0xFF7D5638), width: 2.0),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Color(0xFF7D5638), width: 2.0),
+                          BorderSide(color: Color(0xFF7D5638), width: 2.0),
                         ),
                       ),
                       style: TextStyle(color: Colors.black),
@@ -103,17 +135,17 @@ class _ExibirPedidosState extends State<ExibirPedidos> {
               SizedBox(height: 20),
               _pedidosFiltrados.isEmpty
                   ? Center(
-                      child: Text(
-                        "Nenhum pedido encontrado. Para adicionar novos pedidos, clique no ícone +",
-                        style: TextStyle(fontSize: 18, color: Color(0xFF7D5638)),
-                        textAlign: TextAlign.center,
-                      ),
-                    )
+                child: Text(
+                  "Nenhum pedido encontrado. Para adicionar novos pedidos, clique no ícone +",
+                  style: TextStyle(fontSize: 18, color: Color(0xFF7D5638)),
+                  textAlign: TextAlign.center,
+                ),
+              )
                   : Column(
-                      children: _pedidosFiltrados
-                          .map((pedido) => _buildOrderContainer(pedido))
-                          .toList(),
-                    ),
+                children: _pedidosFiltrados
+                    .map((pedido) => _buildOrderContainer(pedido))
+                    .toList(),
+              ),
             ],
           ),
         ),
@@ -130,7 +162,7 @@ class _ExibirPedidosState extends State<ExibirPedidos> {
         _pedidosFiltrados = _pedidos.where((Map<String, dynamic> pedido) {
           bool nomeClienteMatch = pedido['nome'].toLowerCase().contains(filtro);
           bool telefoneMatch =
-              pedido['telefone'].toLowerCase().contains(filtro);
+          pedido['telefone'].toLowerCase().contains(filtro);
           bool dataMatch = pedido['data'].toLowerCase().contains(filtro);
           bool statusMatch = pedido['status'].toLowerCase().contains(filtro);
           bool nomeProdutoMatch = false;
@@ -145,7 +177,8 @@ class _ExibirPedidosState extends State<ExibirPedidos> {
               telefoneMatch ||
               dataMatch ||
               nomeProdutoMatch ||
-              precoProdutoMatch || statusMatch;
+              precoProdutoMatch ||
+              statusMatch;
         }).toList();
       }
     });
@@ -207,10 +240,7 @@ class _ExibirPedidosState extends State<ExibirPedidos> {
                   SizedBox(width: 8),
                   GestureDetector(
                     onTap: () {
-                      setState(() {
-                        _pedidos.remove(pedido);
-                        _pedidosFiltrados = List.from(_pedidos);
-                      });
+                      _deletarPedido(pedido['id']);
                     },
                     child: Icon(
                       Icons.restore_from_trash,

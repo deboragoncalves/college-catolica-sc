@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_pex/pages/exibir_pedidos.dart';
 import 'package:projeto_pex/pages/token_page.dart';
@@ -6,17 +7,15 @@ class LoginPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _validateAndLogin(BuildContext context) {
+  void _validateAndLogin(BuildContext context) async {
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
 
-    // Validação do email
     bool isEmailValid = email.contains('@') &&
         email.contains('.') &&
         email.indexOf('@') < email.lastIndexOf('.') &&
         email.length >= 6;
 
-    // Validação da senha
     bool isPasswordValid = password.length >= 8;
 
     if (!isEmailValid) {
@@ -24,11 +23,17 @@ class LoginPage extends StatelessWidget {
     } else if (!isPasswordValid) {
       _showDialog(context, 'A senha deve ter pelo menos 8 caracteres.');
     } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ExibirPedidos()),
-      );
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: email, password: password);
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ExibirPedidos()),
+        );
+      } catch (e) {
+        _showDialog(context, 'Erro ao fazer login. Verifique suas credenciais.');
+      }
     }
   }
 
