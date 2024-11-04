@@ -20,18 +20,17 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _quantidadeController = TextEditingController();
   final TextEditingController _telefoneController =
-      MaskedTextController(mask: '(00) 00000-0000');
+  MaskedTextController(mask: '(00) 00000-0000');
   final TextEditingController _dataController =
-      MaskedTextController(mask: '00/00/0000');
+  MaskedTextController(mask: '00/00/0000');
 
   String? _produtoSelecionado;
-  List<String> _produtos = ["Produto 1", "Produto 2", "Produto 3"];
+  List<String> _produtos = [];
   List<Map<String, dynamic>> _itens = [];
 
   String? _statusSelecionado;
   List<String> _statusOptions = ["Pedido feito", "Pedido entregue"];
 
-  // Variável para armazenar o nome original
   String? _nomeOriginal;
 
   @override
@@ -44,37 +43,85 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
       _dataController.text = widget.pedido!['data'];
       _statusSelecionado = widget.pedido!['status'];
       _itens = List<Map<String, dynamic>>.from(widget.pedido!['itens']);
-
-      // Armazenar o nome original do pedido para verificar alterações
       _nomeOriginal = widget.pedido!['nome'];
     }
+    _carregarProdutos();
+  }
+
+  Future<void> _carregarProdutos() async {
+    QuerySnapshot produtosSnapshot =
+    await FirebaseFirestore.instance.collection('produtos').get();
+    setState(() {
+      _produtos = produtosSnapshot.docs.map((doc) {
+        return doc['codigo'] as String;
+      }).toList();
+    });
   }
 
   void _salvarPedido() async {
     if (_itens.isNotEmpty) {
+      String nomePedido = _nomeController.text.trim();
+      var querySnapshot = await FirebaseFirestore.instance
+          .collection('pedidos')
+          .where('nome', isEqualTo: nomePedido)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty && _nomeOriginal != nomePedido) {
+        _exibirModalErro("Já existe um pedido com esse nome.");
+        return;
+      }
+
       Map<String, dynamic> pedido = {
-        'nome': _nomeController.text,
-        'telefone': _telefoneController.text,
-        'email': _emailController.text,
-        'data': _dataController.text,
+        'nome': nomePedido,
+        'telefone': _telefoneController.text.trim(),
+        'email': _emailController.text.trim(),
+        'data': _dataController.text.trim(),
         'status': _statusSelecionado,
         'itens': _itens,
       };
 
       try {
-        // Verificar se o nome foi alterado
-        if (_nomeOriginal != null && _nomeOriginal != _nomeController.text) {
-          // Excluir o pedido com o nome original
+        // Atualiza a quantidade dos produtos no estoque
+        for (var item in _itens) {
+          String produtoId = item['produto'];
+          int quantidadePedido = item['quantidade'];
+
+          // Busca o documento do produto no Firestore
+          DocumentReference produtoRef = FirebaseFirestore.instance
+              .collection('produtos')
+              .doc(produtoId);
+
+          DocumentSnapshot produtoSnapshot = await produtoRef.get();
+          if (produtoSnapshot.exists) {
+            int quantidadeEstoque = produtoSnapshot['quantidade'];
+
+            // Verifica se a quantidade no estoque é suficiente
+            if (quantidadeEstoque >= quantidadePedido) {
+              // Atualiza a quantidade do produto no estoque
+              int novaQuantidade = quantidadeEstoque - quantidadePedido;
+              await produtoRef.update({'quantidade': novaQuantidade});
+            } else {
+              _exibirModalErro(
+                  "Estoque insuficiente para o produto $produtoId. Quantidade disponível: $quantidadeEstoque.");
+              return; // Interrompe a execução se o estoque for insuficiente
+            }
+          } else {
+            _exibirModalErro("Produto $produtoId não encontrado no estoque.");
+            return;
+          }
+        }
+
+        // Salva o pedido no Firestore
+        if (_nomeOriginal != null && _nomeOriginal != nomePedido) {
           await FirebaseFirestore.instance
               .collection('pedidos')
               .doc(_nomeOriginal)
               .delete();
         }
 
-        // Salvar o pedido com o novo nome
         await FirebaseFirestore.instance
             .collection('pedidos')
-            .doc(_nomeController.text)
+            .doc(nomePedido)
             .set(pedido);
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -196,7 +243,7 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border:
-                                Border.all(color: Color(0xFF7D5638), width: 2),
+                            Border.all(color: Color(0xFF7D5638), width: 2),
                           ),
                           child: IconButton(
                             icon: Icon(Icons.add),
@@ -228,7 +275,7 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
                                   style: TextStyle(color: Color(0xFF7D5638))),
                               Text("${item['quantidade']} un",
                                   style: TextStyle(color: Color(0xFF7D5638))),
-                              Text("R\$ 10,00/un",
+                              Text("R\$ ${item['preco']}/un",
                                   style: TextStyle(color: Color(0xFF7D5638))),
                               IconButton(
                                 icon: Icon(Icons.restore_from_trash,
@@ -272,70 +319,66 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
   InputDecoration _buildInputDecoration(String label) {
     return InputDecoration(
       labelText: label,
-      labelStyle: TextStyle(color: Color(0xFFE5CDAE)),
-      filled: true,
-      fillColor: Colors.white,
-      border: OutlineInputBorder(
-        borderSide: BorderSide(color: Color(0xFF7D5638), width: 2.0),
+      labelStyle: TextStyle(color: Color(0xFF7D5638)),
+      enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Color(0xFF7D5638)),
       ),
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Color(0xFF7D5638), width: 2.0),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Color(0xFF7D5638), width: 2.0),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Color(0xFF7D5638)),
       ),
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label,
-      {TextInputType keyboardType = TextInputType.text}) {
+  TextField _buildTextField(
+      TextEditingController controller,
+      String label, {
+        TextInputType keyboardType = TextInputType.text,
+      }) {
     return TextField(
       controller: controller,
-      keyboardType: keyboardType,
       decoration: _buildInputDecoration(label),
-      style: TextStyle(color: Colors.black),
+      style: TextStyle(color: Color(0xFF7D5638)),
+      keyboardType: keyboardType,
     );
   }
 
-  void validarCampos() {
-    String email = _emailController.text.trim();
-    bool isEmailValid = email.contains('@') &&
-        email.contains('.') &&
-        email.indexOf('@') < email.lastIndexOf('.') &&
-        email.length >= 6;
+  void validarCampos() async {
+    if (_produtoSelecionado != null && _quantidadeController.text.isNotEmpty) {
+      int quantidadeSelecionada = int.parse(_quantidadeController.text);
 
-    if (_nomeController.text.isEmpty) {
-      _exibirModalErro("O campo Nome deve ser preenchido.");
-    } else if (_enderecoController.text.isEmpty) {
-      _exibirModalErro("O campo Endereço deve ser preenchido.");
-    } else if (_telefoneController.text.isEmpty ||
-        _telefoneController.text.length != 15) {
-      _exibirModalErro(
-          "O campo Telefone deve estar no formato (00) 00000-0000.");
-    } else if (!isEmailValid) {
-      _exibirModalErro('Email inválido. Verifique se tem "@" e ".".');
-    } else if (_dataController.text.isEmpty ||
-        _dataController.text.length != 10) {
-      _exibirModalErro("O campo Data deve estar no formato dd/MM/yyyy.");
-    } else if (_produtoSelecionado == null) {
-      _exibirModalErro("O campo Produto deve ser preenchido.");
-    } else if (_quantidadeController.text.isEmpty ||
-        int.tryParse(_quantidadeController.text) == null ||
-        int.parse(_quantidadeController.text) <= 0) {
-      _exibirModalErro("Informe uma quantidade válida.");
-    } else if (_statusSelecionado == null) {
-      _exibirModalErro("O campo Status deve ser preenchido.");
-    } else {
-      setState(() {
+      // Consulta a quantidade disponível do produto selecionado
+      DocumentSnapshot produtoSnapshot = await FirebaseFirestore.instance
+          .collection('produtos')
+          .doc(_produtoSelecionado)
+          .get();
+
+      if (produtoSnapshot.exists) {
+        int quantidadeEstoque = produtoSnapshot['quantidade'];
+
+        // Verifica se a quantidade selecionada é maior que a disponível
+        if (quantidadeSelecionada > quantidadeEstoque) {
+          _exibirModalErro(
+              "A quantidade selecionada excede o estoque disponível. Estoque disponível: $quantidadeEstoque."
+          );
+          return; // Para a execução se a quantidade for maior que o estoque
+        }
+
+        // Adiciona o item ao pedido se a quantidade for válida
         _itens.add({
           'produto': _produtoSelecionado!,
-          'quantidade': int.parse(_quantidadeController.text),
-          // ajustar preco
-          'preco': double.parse('10')
+          'quantidade': quantidadeSelecionada,
+          'preco': produtoSnapshot['preco'].toDouble()
         });
+
+        // Limpa os campos de entrada
         _produtoSelecionado = null;
         _quantidadeController.clear();
-      });
+        setState(() {});
+      } else {
+        _exibirModalErro("Produto não encontrado no estoque.");
+      }
+    } else {
+      _exibirModalErro("Selecione um produto e informe a quantidade.");
     }
   }
 
@@ -344,25 +387,11 @@ class _AdicionarEditarPedidosState extends State<AdicionarEditarPedidos> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color(0xFF7D5638),
-          content: Text(
-            mensagem,
-            style: TextStyle(
-              color: Color(0xFFE5CDAE),
-            ),
-          ),
+          title: Text("Erro"),
+          content: Text(mensagem),
           actions: [
             TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Color(0xFFF3E6D4),
-                foregroundColor: Color(0xFF7D5638),
-              ),
-              child: Text(
-                'OK',
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              ),
+              child: Text("OK"),
               onPressed: () {
                 Navigator.of(context).pop();
               },

@@ -62,15 +62,15 @@ class _ExibirProdutosState extends State<ExibirProdutos> {
                         fillColor: Color(0xFFF7F7F7),
                         border: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Color(0xFF7D5638), width: 2.0),
+                          BorderSide(color: Color(0xFF7D5638), width: 2.0),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Color(0xFF7D5638), width: 2.0),
+                          BorderSide(color: Color(0xFF7D5638), width: 2.0),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Color(0xFF7D5638), width: 2.0),
+                          BorderSide(color: Color(0xFF7D5638), width: 2.0),
                         ),
                       ),
                       style: TextStyle(color: Colors.black),
@@ -91,9 +91,9 @@ class _ExibirProdutosState extends State<ExibirProdutos> {
                               produto['descricao']?.toLowerCase() ??
                                   '';
                           final preco =
-                              produto['preco'].toString().toLowerCase();
+                          produto['preco'].toString().toLowerCase();
                           final quantidade =
-                              produto['quantidade'].toString().toLowerCase();
+                          produto['quantidade'].toString().toLowerCase();
 
                           return nome.contains(query) ||
                               descricao.contains(query) ||
@@ -145,10 +145,9 @@ class _ExibirProdutosState extends State<ExibirProdutos> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _buildProductColumn('01', 43),
+                          _buildProductColumn(produto['codigo'], 43), // Exibe o código do produto
                           _buildProductColumn('${produto['nome']}', 80),
-                          _buildProductColumn(
-                              'R\$ ${produto['preco'].toStringAsFixed(2)}', 80),
+                          _buildProductColumn('R\$ ${produto['preco'].toStringAsFixed(2)}', 80),
                           _buildProductColumn('${produto['quantidade']}', 80),
                           _buildActionColumn(index - 1),
                         ],

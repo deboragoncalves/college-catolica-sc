@@ -15,24 +15,24 @@ class AdicionarEditarProdutos extends StatefulWidget {
 
 class _AdicionarEditarProdutosState extends State<AdicionarEditarProdutos> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final TextEditingController _codProdutoController = TextEditingController();
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _descricaoController = TextEditingController();
   final TextEditingController _precoController = TextEditingController();
   final TextEditingController _quantidadeController = TextEditingController();
 
-  // Armazena o ID do produto, se existir
   String? _docId;
 
   @override
   void initState() {
     super.initState();
     if (widget.produto != null) {
-      _docId = widget.produto!['id']; // Armazena o ID do documento
+      _docId = widget.produto!['id'];
+      _codProdutoController.text = widget.produto!['codigo'];
       _nomeController.text = widget.produto!['nome'];
-      _precoController.text = widget.produto!['preco'].toString();
       _descricaoController.text = widget.produto!['descricao'];
-      _quantidadeController.text =
-          widget.produto!['quantidade'].toString();
+      _precoController.text = widget.produto!['preco'].toString();
+      _quantidadeController.text = widget.produto!['quantidade'].toString();
     }
   }
 
@@ -65,11 +65,12 @@ class _AdicionarEditarProdutosState extends State<AdicionarEditarProdutos> {
                 child: Column(
                   children: [
                     SizedBox(height: 20.0),
-                    _buildTextField(
-                        _nomeController, 'Nome', TextInputType.text),
+                    _buildTextField(_codProdutoController, 'Código do Produto', TextInputType.text,
+                        inputFormatters: [LengthLimitingTextInputFormatter(15)]),
                     SizedBox(height: 20.0),
-                    _buildTextField(_descricaoController, 'Descrição Detalhada',
-                        TextInputType.text),
+                    _buildTextField(_nomeController, 'Nome', TextInputType.text),
+                    SizedBox(height: 20.0),
+                    _buildTextField(_descricaoController, 'Descrição Detalhada', TextInputType.text),
                     SizedBox(height: 20.0),
                     Row(
                       children: [
@@ -149,14 +150,17 @@ class _AdicionarEditarProdutosState extends State<AdicionarEditarProdutos> {
     return TextField(
       controller: controller,
       keyboardType: keyboardType,
-      inputFormatters: inputFormatters,
+      inputFormatters: inputFormatters ??
+          [LengthLimitingTextInputFormatter(60)], // Limita a 15 caracteres
       decoration: _buildInputDecoration(label),
       style: TextStyle(color: Colors.black),
     );
   }
 
   void validarCampos() async {
-    if (_nomeController.text.isEmpty) {
+    if (_codProdutoController.text.isEmpty) {
+      _exibirModalErro("O campo Código do Produto deve ser preenchido.");
+    } else if (_nomeController.text.isEmpty) {
       _exibirModalErro("O campo Nome deve ser preenchido.");
     } else if (_descricaoController.text.isEmpty) {
       _exibirModalErro("O campo Descrição deve ser preenchido.");
@@ -165,25 +169,40 @@ class _AdicionarEditarProdutosState extends State<AdicionarEditarProdutos> {
     } else if (_quantidadeController.text.isEmpty) {
       _exibirModalErro("O campo Quantidade deve ser preenchido.");
     } else {
-      final produtoData = {
-        'nome': _nomeController.text,
-        'descricao': _descricaoController.text,
-        'preco': double.parse(_precoController.text),
-        'quantidade': int.parse(_quantidadeController.text),
-      };
+      // Verificar se o código do produto já existe
+      final snapshot = await FirebaseFirestore.instance
+          .collection('produtos')
+          .doc(_codProdutoController.text)
+          .get();
 
-      final produtosCollection = FirebaseFirestore.instance.collection('produtos');
-
-      if (_docId != null) {
-        // Editar produto existente
-        await produtosCollection.doc(_docId).set(produtoData);
+      if (snapshot.exists && _docId == null) {
+        _exibirModalErro("Código do produto já existente.");
       } else {
-        // Adicionar novo produto
-        await produtosCollection.add(produtoData);
-      }
+        final produtoData = {
+          'codigo': _codProdutoController.text,
+          'nome': _nomeController.text,
+          'descricao': _descricaoController.text,
+          'preco': double.parse(_precoController.text),
+          'quantidade': int.parse(_quantidadeController.text),
+        };
 
-      Navigator.pop(context, {'atualizar': true});
+        final produtosCollection = FirebaseFirestore.instance.collection('produtos');
+
+        if (_docId != null) {
+          if (_docId != _codProdutoController.text) {
+            await produtosCollection.doc(_docId).delete();
+            await produtosCollection.doc(_codProdutoController.text).set(produtoData);
+          } else {
+            await produtosCollection.doc(_docId).set(produtoData);
+          }
+        } else {
+          await produtosCollection.doc(_codProdutoController.text).set(produtoData);
+        }
+
+        Navigator.pop(context, {'atualizar': true});
+      }
     }
+
   }
 
   void _exibirModalErro(String mensagem) {
